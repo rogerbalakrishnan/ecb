@@ -1,5 +1,5 @@
 
-function out = feistelnetwork(code, blocksize, key, rounds, enc)
+function out = feistelnetwork(code, blocksize, key, numrounds, enc)
 
     half = blocksize/2;
     
@@ -14,10 +14,10 @@ function out = feistelnetwork(code, blocksize, key, rounds, enc)
     % if we are decrypting count down
     if (enc == 1)
         lower = 1;
-        upper = rounds;
+        upper = numrounds;
         
     else % decryption
-        lower = rounds;
+        lower = numrounds;
         upper = 1;
     endif
     
@@ -38,7 +38,7 @@ function out = feistelnetwork(code, blocksize, key, rounds, enc)
             % bit mask right half
             r = bitand(block, bitmask); 
         
-            [ln, rn] = feistel(l, r, key, roundfn, i);
+            [ln, rn] = oneround(l, r, key, roundfn, i);
             
             outblock = bitxor(bitshift(ln, half), bitand(rn, bitmask));
             
