@@ -1,9 +1,11 @@
 
-numrounds = 8;
+#!/usr/bin/octave -qf
+
+numrounds = 2;
 
 arglist = argv()
 
-numargs = size(arglist)(1)
+numargs = size(arglist)(1);
 
 if (numargs < 5)
 
@@ -11,16 +13,14 @@ if (numargs < 5)
 else
   
   blocksize = arglist{3};
-  
-  datamode = arglist{4};
-  
-  key = arglist{5};
+  datamode  = arglist{6};
+  key       = arglist{5};
   
   switch (arglist{1})
     case "-e"
-      fn = @feistelcrypt;
+      enc = 1;
     case "-d"
-      fn = @feisteldecrypt;
+      enc = 0;
     otherwise
       printf("invalid mode (%s)", mode);
       return;
@@ -29,17 +29,19 @@ else
   switch(arglist{6})
   
     case "-t"
-      fn(arglist{7}, blocksize, key, numrounds)
+      code = toascii(arglist{7});
     case "-f"
        % load data from file
        raw = textread(arglist{7}, "%s");
        data = strjoin(raw, " ");
        
-       fn(data, blocksize, key, numrounds)
+       code = toascii(data);
        
     otherwise
       printf("Invalid datamode (%s)\n", datamode);
+      return;
   endswitch
   
+  feistelnetwork(code, blocksize, key, numrounds, enc);
   
 endif

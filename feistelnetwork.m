@@ -1,6 +1,15 @@
 
+%
+% code is ascii text
+% block size in bitset
+% key value 
+% number of rounds
+% enc 1 to encryt, 0 to decrypting
+%
 function out = feistelnetwork(code, blocksize, key, numrounds, enc)
 
+    code 
+    blocksize
     half = blocksize/2;
     
     bitmask = 2^half - 1;
@@ -8,7 +17,7 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
     roundfn = @round15;
 
     % split message up into array of blocks
-    blockarray = splitmessage(code, blocksize);
+    blockarray = splitmessage(code, blocksize)
     
     % if we are encrypting count up the rounds
     % if we are decrypting count down
@@ -23,6 +32,7 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
     
     % if we are decrypting do initial swap of blocks
     if (enc == 0)
+        pause
         blockarray = swapmessage(blockarray, blocksize);
     endif
     
