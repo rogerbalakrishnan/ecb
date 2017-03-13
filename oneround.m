@@ -7,6 +7,6 @@ function [l, r] = oneround (li, ri, k, roundfnp, i)
     f = roundfnp(ri, k, i);
     
     r = bitxor (li, f);
-    
+   
 endfunction
 

@@ -1,25 +1,23 @@
 
 function m = splitmessage(message, blocksizeinbits)
 
-    message
-    blocksizeinbits
-    chars = blocksizeinbits/8
+    charsinblock = blocksizeinbits/8
     
-    if (chars > 1)
+    if (charsinblock > 1)
     
-        size(message)(2)
+        size(message)(2);
         
-        fill = mod(size(message)(2), chars)
+        fill = mod(size(message)(2), charsinblock);
         
-        message = [message blanks(fill)]
+        message = [message blanks(fill)];
         
-        numrows = ceil(size(message)(2) / chars)
+        numrows = ceil(size(message)(2) / charsinblock);
         
         m = cell(1, numrows);
         
         for i = 1:numrows    
         
-            m{i} = message((i-1) * chars + 1:(i*chars))
+            m{i} = message((i-1) * chars + 1:(i*charsinblock));
                 
         endfor
     else

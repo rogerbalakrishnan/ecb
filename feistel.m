@@ -3,7 +3,7 @@
 
 numrounds = 2;
 
-arglist = argv()
+arglist = argv();
 
 numargs = size(arglist)(1);
 
@@ -33,15 +33,21 @@ else
     case "-f"
        % load data from file
        raw = textread(arglist{7}, "%s");
-       data = strjoin(raw, " ");
        
-       code = toascii(data);
+       code = toascii(strjoin(raw, " "));
        
     otherwise
       printf("Invalid datamode (%s)\n", datamode);
       return;
   endswitch
   
-  feistelnetwork(code, blocksize, key, numrounds, enc);
+  outdata = feistelnetwork(code, blocksize, key, numrounds, enc);
+  
+  if (strcmp(datamode, "-f"))
+  
+    outfile = [arglist{7} ".out"]
+    dlmwrite(outfile, char(outdata));
+  
+  endif
   
 endif

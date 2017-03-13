@@ -13,8 +13,10 @@ function blockarray = swapmessage (blockarray, blocksize)
     
     % mask out the left half
     r = bitand(data, mask);
+   
+    data = bitor(l, bitshift(r, half));
     
-    blockarray{row} = bitand (l, bitshift(r, half));
+     blockarray{row} = data;
   
   endfor
 
