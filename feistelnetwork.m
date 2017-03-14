@@ -60,14 +60,13 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
         blockarray = swapmessage(blockarray, blocksize);
     endif
     
-    blockarray
-    char(blockarray)
-    
     if (size(blockarray)(2) > 1)
-        % concatenate blocks into message
-        out = strjoin(char(blockarray), "");
+        mat = cell2mat(blockarray);
+        vec = mat(:)'
     else
-        out = char(blockarray{1});
+        vec = blockarray{1};
     endif
+    
+    out = dec2hex(vec)';
 
 endfunction
