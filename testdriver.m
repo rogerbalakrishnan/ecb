@@ -1,6 +1,8 @@
 
 function rc = testdriver (code, block, key, rounds, enc)
 
-  rc = feistelnetwork(toascii(code), block, key, 2, enc);
+  asciicode = toascii(code)
+
+  rc = feistelnetwork(asciicode, block, key, 2, enc);
 
 endfunction

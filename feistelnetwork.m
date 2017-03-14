@@ -1,6 +1,6 @@
 
 %
-% code is ascii text
+% code is ascii equivalent of the text
 % block size in bitset
 % key value 
 % number of rounds
@@ -60,11 +60,14 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
         blockarray = swapmessage(blockarray, blocksize);
     endif
     
+    blockarray
+    char(blockarray)
+    
     if (size(blockarray)(2) > 1)
         % concatenate blocks into message
-        out = strjoin(blockarray, " ");
+        out = strjoin(char(blockarray), "");
     else
-        out = blockarray{1};
+        out = char(blockarray{1});
     endif
 
 endfunction
