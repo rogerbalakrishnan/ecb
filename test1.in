@@ -1,0 +1,5 @@
+
+This is text that we want encrypted by the encrypter
+It is read in and then processed by the fiestal thing
+
+The output can be recovered using the decrypt function

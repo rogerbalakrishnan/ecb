@@ -15,7 +15,7 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
     roundfn = @round15;
 
     % split message up into array of blocks
-    blockarray = splitmessage(code, blocksize);
+    blockarray = splitmessage(code, blocksize)
     
     % if we are encrypting count up the rounds
     % if we are decrypting count down
@@ -67,6 +67,6 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
         vec = blockarray{1};
     endif
     
-    out = dec2hex(vec)';
+    out = vec;
 
 endfunction

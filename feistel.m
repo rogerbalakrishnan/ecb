@@ -11,12 +11,20 @@ if (numargs < 5)
 
   printf("Usage feistel <-e|-d> <-b blocksize> <-k key> <-t text | -f file>");
 else
+  % encrypt or decrypt
+  command    = arglist{1};
   
-  blocksize = arglist{3};
-  datamode  = arglist{6};
-  key       = arglist{5};
+  blocksize  = str2num(arglist{3});
+  key        = str2num(arglist{5});
   
-  switch (arglist{1})
+  % text input or file input
+  datamode   = arglist{6};
+  
+  % text or filename
+  datasource = arglist{7};
+
+  
+  switch (command)
     case "-e"
       enc = 1;
     case "-d"
@@ -26,28 +34,79 @@ else
       return;
   endswitch
   
-  switch(arglist{6})
+  switch(datamode)
   
     case "-t"
-      code = toascii(arglist{7});
+      if (enc == 1)
+          code = toascii(datasource);
+      else
+          
+      endif
     case "-f"
        % load data from file
-       raw = textread(arglist{7}, "%s");
-       
-       code = toascii(strjoin(raw, " "));
+       if (enc == 1)
+          raw = textread(datasource, "%s")
+          
+          if (size(raw)(2) > 1)
+              vec = strjoin(raw, " ")
+          else
+              vec = raw{1}
+          endif
+
+          code = toascii(vec)
+          
+       else 
+       %decoding need to read encoded file
+       % which is just hex bytes
+          raw = textread(datasource, "%s")
+          
+          % concatenate lines into one string
+          if (size(raw)(2) > 1)
+             vec = strjoin(raw, "")
+          else
+             vec = raw{1}
+          endif
+           
+          % break up string into vector of pairs of 
+          % hex bytes
+          code = [];
+           
+          for i = 1:size(vec)(2)/2
+           
+             % get pair of hex bytes
+             hex = vec(2*1 - 1: 2*i);
+             
+             % append hex bytes decimal to code
+             code = [code hex2dec(hex) ];
+           
+          endfor
+           
+
+       endif
        
     otherwise
       printf("Invalid datamode (%s)\n", datamode);
       return;
   endswitch
   
-  outdata = feistelnetwork(code, blocksize, key, numrounds, enc);
+  out = feistelnetwork(code, blocksize, key, numrounds, enc);
   
+  if (strcmp (command, "-d"))
+    outdata = char(out); 
+  else
+     outdata = out;
+  endif
+  
+  % If we had file input write the output to a file with a .out 
+  % extension
   if (strcmp(datamode, "-f"))
   
-    outfile = [arglist{7} ".out"]
-    dlmwrite(outfile, char(outdata));
+    outfile = [datasource ".out"];
+
+    dlmwrite(outfile, outdata, "", 0, 0);
   
   endif
+  
+  outdata
   
 endif
