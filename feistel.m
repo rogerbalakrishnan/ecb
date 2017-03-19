@@ -37,11 +37,9 @@ else
   switch(datamode)
   
     case "-t"
-      if (enc == 1)
-          code = toascii(datasource);
-      else
-          
-      endif
+
+       code = toascii(datasource);
+       
     case "-f"
        % load data from file
        if (enc == 1)
@@ -57,7 +55,7 @@ else
           
        else 
        %decoding need to read encoded file
-       % which is just hex bytes
+       % which is just ascii
           code = dlmread(datasource, ",");
            
        endif
