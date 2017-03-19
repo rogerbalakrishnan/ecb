@@ -6,7 +6,7 @@ function out = testdriver2 (filename, block, key, rounds, enc)
 
     code = toascii(strjoin(raw, " "));
   else
-    raw = textread(filename, "%2c");
+    raw = textread(filename, "%s");
     
     code = hex2dec(raw);
     

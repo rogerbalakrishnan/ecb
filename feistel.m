@@ -47,7 +47,7 @@ else
        if (enc == 1)
           raw = textread(datasource, "%s")
           
-          if (size(raw)(2) > 1)
+          if (size(raw)(1) > 1)
               vec = strjoin(raw, " ")
           else
               vec = raw{1}
@@ -58,30 +58,8 @@ else
        else 
        %decoding need to read encoded file
        % which is just hex bytes
-          raw = textread(datasource, "%s")
-          
-          % concatenate lines into one string
-          if (size(raw)(2) > 1)
-             vec = strjoin(raw, "")
-          else
-             vec = raw{1}
-          endif
+          code = dlmread(datasource, ",")
            
-          % break up string into vector of pairs of 
-          % hex bytes
-          code = [];
-           
-          for i = 1:size(vec)(2)/2
-           
-             % get pair of hex bytes
-             hex = vec(2*1 - 1: 2*i);
-             
-             % append hex bytes decimal to code
-             code = [code hex2dec(hex) ];
-           
-          endfor
-           
-
        endif
        
     otherwise
@@ -103,7 +81,7 @@ else
   
     outfile = [datasource ".out"];
 
-    dlmwrite(outfile, outdata, "", 0, 0);
+    dlmwrite(outfile, outdata, ",", 0, 0);
   
   endif
   
