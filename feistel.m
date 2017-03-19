@@ -45,20 +45,20 @@ else
     case "-f"
        % load data from file
        if (enc == 1)
-          raw = textread(datasource, "%s")
+          raw = textread(datasource, "%s");
           
           if (size(raw)(1) > 1)
-              vec = strjoin(raw, " ")
+              vec = strjoin(raw, " ");
           else
-              vec = raw{1}
+              vec = raw{1};
           endif
 
-          code = toascii(vec)
+          code = toascii(vec);
           
        else 
        %decoding need to read encoded file
        % which is just hex bytes
-          code = dlmread(datasource, ",")
+          code = dlmread(datasource, ",");
            
        endif
        
