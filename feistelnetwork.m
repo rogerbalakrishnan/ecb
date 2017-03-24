@@ -67,6 +67,8 @@ function out = feistelnetwork(code, blocksize, key, numrounds, enc)
         vec = blockarray{1};
     endif
     
-    out = vec;
+    % convert to byte array
+    out = convertblocks(vec, blocksize);
+    
 
 endfunction

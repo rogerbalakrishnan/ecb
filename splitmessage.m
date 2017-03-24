@@ -17,10 +17,19 @@ function m = splitmessage(message, blocksizeinbits)
         
         m = cell(1, numrows);
         
-        for i = 1:numrows    
+        for r = 1:numrows    
         
-            m{i} = message((i-1) * charsinblock + 1:(i*charsinblock));
-                
+            block = message((r-1) * charsinblock + 1:(r*charsinblock));
+            
+            % convert multi byte vector to a single number
+            value = 0;   
+            for i = 1:charsinblock
+             
+              value = value + block(i) * power(256, (i-1));
+                 
+            endfor
+            
+            m{r} = value;
         endfor
     else
          m = cell(1,1);
