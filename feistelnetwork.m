@@ -1,12 +1,13 @@
 
 %
+% mode ECB - 0 CBC-1
 % code is ascii equivalent of the text
 % block size in bitset
 % key value 
 % number of rounds
 % enc 1 to encryt, 0 to decrypting
 %
-function out = feistelnetwork(code, blocksize, key, numrounds, enc)
+function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc)
 
     half = blocksize/2;
     

@@ -7,21 +7,32 @@ arglist = argv();
 
 numargs = size(arglist)(1);
 
-if (numargs < 5)
+if (numargs < 7)
 
-  printf("Usage feistel <-e|-d> <-b blocksize> <-k key> <-t text | -f file>");
+  printf("Usage feistel <-e|-d> <-m mode> <-i iv> <-b blocksize> <-k key> <-t text | -f file>" );
 else
   % encrypt or decrypt
   command    = arglist{1};
   
-  blocksize  = str2num(arglist{3});
-  key        = str2num(arglist{5});
+  modestr    = arglist{3};
+  
+  if (strcmp(modestr, "ECB")
+    mode = 0;
+    b = 5;
+  else
+     mode = 1;
+     iv = toascii(arglist{6});
+     b = 7;
+  endif
+  
+  blocksize  = str2num(arglist{b});
+  key        = str2num(arglist{b+2});
   
   % text input or file input
-  datamode   = arglist{6};
+  datamode   = arglist{b+3};
   
   % text or filename
-  datasource = arglist{7};
+  datasource = arglist{b+4};
 
   
   switch (command)
@@ -65,7 +76,7 @@ else
       return;
   endswitch
   
-  out = feistelnetwork(code, blocksize, key, numrounds, enc);
+  out = feistelnetwork(mode, code, blocksize, key, numrounds, enc);
   
   if (strcmp (command, "-d"))
     outdata = char(out); 
