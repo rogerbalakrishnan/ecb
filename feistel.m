@@ -81,7 +81,7 @@ else
   if (strcmp (command, "-d"))
     outdata = char(out); 
   else
-     outdata = out;
+     outdata = char(out);
   endif
   
   % If we had file input write the output to a file with a .out 
