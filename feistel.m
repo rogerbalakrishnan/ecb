@@ -18,6 +18,7 @@ else
   
   if (strcmp(modestr, "ECB")
     mode = 0;
+    iv = 0;
     b = 5;
   else
      mode = 1;
@@ -67,7 +68,7 @@ else
        else 
        %decoding need to read encoded file
        % which is just ascii
-          code = dlmread(datasource, ",");
+          code = text(datasource, "%s");
            
        endif
        
@@ -76,13 +77,9 @@ else
       return;
   endswitch
   
-  out = feistelnetwork(mode, code, blocksize, key, numrounds, enc);
+  out = feistelnetwork(mode, code, blocksize, key, numrounds, enc, iv);
   
-  if (strcmp (command, "-d"))
-    outdata = char(out); 
-  else
-     outdata = char(out);
-  endif
+  outdata = char(out);
   
   % If we had file input write the output to a file with a .out 
   % extension
@@ -90,7 +87,7 @@ else
   
     outfile = [datasource ".out"];
 
-    dlmwrite(outfile, outdata, ",", 0, 0);
+    dlmwrite(outfile, outdata, "", 0, 0);
   
   endif
   

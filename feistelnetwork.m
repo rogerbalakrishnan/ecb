@@ -7,7 +7,7 @@
 % number of rounds
 % enc 1 to encryt, 0 to decrypting
 %
-function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc)
+function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc, iv)
 
     half = blocksize/2;
     
@@ -35,12 +35,26 @@ function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc)
     if (enc == 0)
         blockarray = swapmessage(blockarray, blocksize);
     endif
+    
+    if (mode ==1)
+      subkey = generatesubkeys(key, numrounds)
+    endif
+    
+    if (mode == 1)
+      savedvalue = iv;
+    endif
 
     for i = lower:step:upper
  
         for m = 1:size(blockarray)(2)
         
-            block = blockarray{m};
+            block = blockarray{m}
+            
+            if (enc == 1)
+              if (mode ==1)
+                block = bitxor(blockarray{m}, savedvalue)
+              endif 
+            endif
             
             % right shift left half
             l = bitshift(block, -1 * half);
@@ -48,9 +62,22 @@ function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc)
             % bit mask right half
             r = bitand(block, bitmask);
         
-            [ln, rn] = oneround(l, r, key, roundfn, i);
+            if (mode ==0)
+              [ln, rn] = oneround(l, r, key, roundfn, i);
+            else
+              [ln, rn] = oneround(l, r, subkey{1,i}, roundfn, i);
+            endif
             
-            blockarray{m} = bitxor(bitshift(ln, half), bitand(rn, bitmask));
+            result = bitxor(bitshift(ln, half), bitand(rn, bitmask));
+            
+            if (enc == 0)
+              if (mode == 1)
+                 result = bitxor(result, savedvalue);
+                 savedvalue = result;
+              endif
+            endif
+            
+            blockarray{m} = result;
         
         endfor
         
