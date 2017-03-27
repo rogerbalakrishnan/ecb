@@ -31,62 +31,64 @@ function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc, iv)
         step = -1;
     endif
     
-    % if we are decrypting do initial swap of blocks
-    if (enc == 0)
-        blockarray = swapmessage(blockarray, blocksize);
-    endif
-    
     if (mode ==1)
       subkey = generatesubkeys(key, numrounds)
     endif
     
     if (mode == 1)
-      savedvalue = iv;
+      prevvalue = iv;
     endif
 
-    for i = lower:step:upper
- 
-        for m = 1:size(blockarray)(2)
+    % for each block
+    for m = 1:size(blockarray)(2)
+    
+      % get the bloc to encrypt/decrypt
+      block = blockarray{m}
+      
+      % if we are decrypting do initial swap of blocks
+      if (enc == 0)
+          block = swapmessage(block, blocksize);
+      endif
+      
+      % if cbc and encrypting we need to or the block and the 
+      % prev value
+      if (enc == 1 && mode ==1)
+        block = bitxor(block,prevvalue);
+      endif
+    
+      % do the rounds 
+      for i = lower:step:upper
         
-            block = blockarray{m}
-            
-            if (enc == 1)
-              if (mode ==1)
-                block = bitxor(blockarray{m}, savedvalue)
-              endif 
-            endif
-            
-            % right shift left half
-            l = bitshift(block, -1 * half);
-            
-            % bit mask right half
-            r = bitand(block, bitmask);
+          % right shift left half
+          l = bitshift(block, -1 * half);
+          
+          % bit mask right half
+          r = bitand(block, bitmask);
+      
+          if (mode ==0)
+            [ln, rn] = oneround(l, r, key, roundfn, i);
+          else
+            [ln, rn] = oneround(l, r, subkey{1,i}, roundfn, i);
+          endif
+          
+          block = bitxor(bitshift(ln, half), bitand(rn, bitmask));
         
-            if (mode ==0)
-              [ln, rn] = oneround(l, r, key, roundfn, i);
-            else
-              [ln, rn] = oneround(l, r, subkey{1,i}, roundfn, i);
-            endif
-            
-            result = bitxor(bitshift(ln, half), bitand(rn, bitmask));
-            
-            if (enc == 0)
-              if (mode == 1)
-                 result = bitxor(result, savedvalue);
-                 savedvalue = result;
-              endif
-            endif
-            
-            blockarray{m} = result;
+      endfor
         
-        endfor
+      % if we are decrypting do final swap of blocks
+      if (enc == 0)
+          block = swapmessage(block, blocksize);
+          
+          if (mode == 1)
+            block = bitxor(block, prevvalue)
+          endif
+      endif
+      
+      if (mode == 1)
+        prevvalue = block;
+      endif
         
     endfor
-    
-    % if we are decrypting do final swap of blocks
-    if (enc == 0)
-        blockarray = swapmessage(blockarray, blocksize);
-    endif
     
     if (size(blockarray)(2) > 1)
         mat = cell2mat(blockarray);

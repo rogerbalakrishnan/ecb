@@ -1,10 +1,12 @@
 
-function blockarray = swapmessage (blockarray, blocksize)
+function newblock = swapmessage (block, blocksize)
 
   half = blocksize/2;
-  mask = (2 ^ half) -1;
+  chars = half/8;
 
-  for row = 1:size(blockarray)(2)
+  if (chars < 1)
+  
+    mask = (2 ^ half) -1;
   
     data = blockarray{row};
     
@@ -15,9 +17,17 @@ function blockarray = swapmessage (blockarray, blocksize)
     r = bitand(data, mask);
    
     data = bitor(l, bitshift(r, half));
-    
-     blockarray{row} = data;
   
-  endfor
+  else
+  
+    l = block(1:half);
+    
+    r = block(half+1: end);
+    
+    data = [r l]
+  
+  endif
+  
+  newblock = data;
 
 endfunction
