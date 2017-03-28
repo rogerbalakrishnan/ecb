@@ -87,6 +87,8 @@ function out = feistelnetwork(mode, code, blocksize, key, numrounds, enc, iv)
       if (mode == 1)
         prevvalue = block;
       endif
+      
+      blockarray{m} = block;
         
     endfor
     
