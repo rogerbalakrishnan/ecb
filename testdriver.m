@@ -2,9 +2,17 @@
 function rc = testdriver (mode, code, block, key, rounds, enc, iv)
 
   if (mode == 0)
-    rc = feistelnetwork(mode, toascii(code), block, key, 2, enc);
+    if (enc == 1)
+      rc = feistelnetwork_enc(mode, toascii(code), block, key, 2, toascii(iv));
+    else
+      rc = feistelnetwork_dec(mode, toascii(code), block, key, 2, toascii(iv));
+    endif
   else
-    rc = feistelnetwork(mode, toascii(code), block, key, 2, enc, toascii(iv));
+    if (enc == 1)
+      rc = feistelnetwork_enc(mode, code, block, key, 2, toascii(iv));
+    else
+      rc = feistelnetwork_dec(mode, code, block, key, 2, toascii(iv));
+    endif
   endif
 
 endfunction

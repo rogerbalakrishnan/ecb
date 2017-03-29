@@ -9,20 +9,20 @@ numargs = size(arglist)(1);
 
 if (numargs < 7)
 
-  printf("Usage feistel <-e|-d> <-m mode> <-i iv> <-b blocksize> <-k key> <-t text | -f file>" );
+  printf("Usage feistel <-e|-d> <-m ECB|CBC> <-i iv> <-b blocksize> <-k key> <-t text | -f file>" );
 else
   % encrypt or decrypt
   command    = arglist{1};
   
   modestr    = arglist{3};
   
-  if (strcmp(modestr, "ECB")
+  if (strcmp(modestr, "ECB"))
     mode = 0;
     iv = 0;
     b = 5;
   else
      mode = 1;
-     iv = toascii(arglist{6});
+     iv = toascii(arglist{5});
      b = 7;
   endif
   
@@ -68,7 +68,7 @@ else
        else 
        %decoding need to read encoded file
        % which is just ascii
-          code = text(datasource, "%s");
+          code = dlmread(datasource, ",");
            
        endif
        
@@ -77,7 +77,11 @@ else
       return;
   endswitch
   
-  out = feistelnetwork(mode, code, blocksize, key, numrounds, enc, iv);
+  if (enc == 1)
+    out = feistelnetwork_enc(mode, code, blocksize, key, numrounds, iv);
+  else
+    out = feistelnetwork_dec(mode, code, blocksize, key, numrounds, iv);
+  endif
   
   outdata = char(out);
   
@@ -87,10 +91,10 @@ else
   
     outfile = [datasource ".out"];
 
-    dlmwrite(outfile, outdata, "", 0, 0);
+    dlmwrite(outfile, out, ",", 0, 0);
   
   endif
   
-  outdata
+  out
   
 endif

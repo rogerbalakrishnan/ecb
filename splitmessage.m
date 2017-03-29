@@ -10,7 +10,7 @@ function m = splitmessage(message, blocksizeinbits)
         fill = mod(size(message)(2), charsinblock);
         
         blankfill = zeros(1, fill) + toascii(' ');
-        
+      
         message = [message blankfill];
         
         numrows = ceil(size(message)(2) / charsinblock);
