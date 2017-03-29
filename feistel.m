@@ -83,7 +83,7 @@ else
     out = feistelnetwork_dec(mode, code, blocksize, key, numrounds, iv);
   endif
   
-  outdata = char(out);
+  outdata = char(out)
   
   % If we had file input write the output to a file with a .out 
   % extension

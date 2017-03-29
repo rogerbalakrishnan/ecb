@@ -1,8 +1,7 @@
 
 function newblock = swapmessage (block, blocksize)
 
-  block
-  half = blocksize/2
+  half = blocksize/2;
   chars = half/8;
 
   if (chars < 1)
@@ -12,12 +11,12 @@ function newblock = swapmessage (block, blocksize)
     data = block;
     
     % shift the left half right half way 
-    l = bitand(bitshift(data, -1 * half), mask)
+    l = bitand(bitshift(data, -1 * half), mask);
     
     % mask out the left half
-    r = bitand(data, mask)
+    r = bitand(data, mask);
    
-    data = bitor(l, bitshift(r, half))
+    data = bitor(l, bitshift(r, half));
   
   else
   
@@ -25,7 +24,7 @@ function newblock = swapmessage (block, blocksize)
     
     r = block(half+1: end);
     
-    data = [r l]
+    data = [r l];
   
   endif
   
